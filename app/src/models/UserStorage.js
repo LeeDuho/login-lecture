@@ -19,5 +19,18 @@ class UserStorage{
     return newUsers; //newUsers를 리턴한다.
     // return this.#users;
   }
+
+  static getUserInfo(id) {
+    const users = this.#users;
+    const idx = users.id.indexOf(id);
+    const userKeys = Object.keys(users); //Object.keys는 객체의 키값을 배열로 반환한다.
+    const userInfo = userKeys.reduce((newUser, info) => {
+      newUser[info] = users[info][idx];
+      return newUser;
+    }, {});
+
+    return userInfo;
+  }
 }
+
 module.exports = UserStorage;
