@@ -16,9 +16,9 @@ const output = {  //output이라는 객체를 만들고, home, login이라는 �
 
 
 const process = {
-  login: (req, res) => {
+  login: async (req, res) => {
     const user = new User(req.body);
-    const response = user.login();
+    const response = await user.login();
     
     // console.log(response);   //이거는 콘솔창에 찍히는 것
     return res.json(response);  //이거는 클라이언트에게 보내는 것, json형태로 보내준다. 브라우저에서는 json형태로 보내준 것을 객체로 바꿔준다.
@@ -42,9 +42,9 @@ const process = {
     // response.msg = "로그인에 실패하였습니다."; //response객체에 msg라는 프로퍼티를 만들고 "로그인에 실패하였습니다."를 넣는다.
     // return res.json(response);
   },
-  register: (req, res) => {
+  register: async (req, res) => {
     const user = new User(req.body);
-    const response = user.register();
+    const response = await user.register();
     return res.json(response);  
   }
 };

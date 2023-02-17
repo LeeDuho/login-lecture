@@ -1,14 +1,23 @@
 "use strict";
 
-class UserStorage{
-  static #users = { //class안에 변수는 const가 필요없다. 여기서 static으로 선언해주면 클래스 자체에 연결되어있기 때문에, new UserStorage()를 하지 않아도 사용할 수 있다. # 표시를 사용하면 private 변수가 된다.
-    id: ["이1", "이2", "이3"],
-    psword: ["1234", "1234", "123456"],
-    name: ["이두호", "이두진", "이두영"],
-  };
+const fs = require("fs").promises; //fs는 파일을 읽고 쓰는 모듈이다. fs.promises는 비동기로 파일을 읽고 쓰는 모듈이다.
 
-  static getUsers(...fields) {//...은 배열로 받는다는 뜻이다. ...변수명은 변수명이라는 배열에 id, psword가 들어가게 된다.
-    const users = this.#users; //this는 UserStorage를 가리킨다.
+class UserStorage{
+  static #getUserInfo(data, id) {
+    const users = JSON.parse(data); //JSON.parse는 json형태의 문자열을 객체로 바꿔준다.
+    const idx = users.id.indexOf(id); //users.id에서 id의 index를 찾는다.
+    const userKeys = Object.keys(users); //Object.keys는 객체의 키값을 배열로 반환한다.
+    const userInfo = userKeys.reduce((newUser, info) => {
+      newUser[info] = users[info][idx];
+      return newUser;
+    }, {});
+
+    return userInfo;
+  }
+
+  static #getUsers(data, isAll, fields) {//...은 배열로 받는다는 뜻이다. ...변수명은 변수명이라는 배열에 id, psword가 들어가게 된다.
+    const users = JSON.parse(data); //JSON.parse는 json형태의 문자열을 객체로 바꿔준다. 
+    if(isAll) return users; //isAll이 true면 users를 리턴한다. (전체를 리턴
     //reduce는 배열의 매소드, 반복문을 돌면서 순회
     const newUsers = fields.reduce((newUsers, field) => { //newUsers는 빈 배열이고, field는 id, psword가 들어간다.
       if(users.hasOwnProperty(field)){ //users에 id, psword가 있으면
@@ -20,26 +29,41 @@ class UserStorage{
     // return this.#users;
   }
 
-  static getUserInfo(id) {
-    const users = this.#users;
-    const idx = users.id.indexOf(id);
-    const userKeys = Object.keys(users); //Object.keys는 객체의 키값을 배열로 반환한다.
-    const userInfo = userKeys.reduce((newUser, info) => {
-      newUser[info] = users[info][idx];
-      return newUser;
-    }, {});
-
-    return userInfo;
+  static getUsers(isAll, ...fields) { //...은 배열로 받는다는 뜻이다. ...변수명은 변수명이라는 배열에 id, psword가 들어가게 된다.
+    return fs
+      .readFile("./src/databases/users.json")
+      .then((data) => {
+        return this.#getUsers(data, isAll, fields); //this는 UserStorage를 가리킨다.은닉화된 메소드를 사용하기 위해 this를 사용한다.
+      })
+      .catch(console.error);
   }
+  static getUserInfo(id) {
+    // const users = this.#users;
+    return fs
+      .readFile("./src/databases/users.json")
+      .then((data) => {
+        return this.#getUserInfo(data, id); //this는 UserStorage를 가리킨다.은닉화된 메소드를 사용하기 위해 this를 사용한다.
+      })
+      .catch(console.error);
+    //   , (err, data) => {
+    //   if(err) throw err;
+    //   console.log(data);
+    //   return JSON.parse(data);
+    // });
 
-  static save(userInfo) {
-    const users = this.#users;
+  }
+  
+  static async save(userInfo) {
+    const users = await this.getUsers(true);  //true를 넣어주면 users에 id, psword, name이 들어간다.
+    if(users.id.includes(userInfo.id)) {
+      throw "이미 존재하는 아이디입니다.";
+    }
     users.id.push(userInfo.id);
     users.psword.push(userInfo.psword);
     users.name.push(userInfo.name);
+    fs.writeFile("./src/databases/users.json", JSON.stringify(users));
     return { success: true };
   }
-
 }
 
 module.exports = UserStorage;
