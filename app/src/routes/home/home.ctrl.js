@@ -9,6 +9,9 @@ const output = {  //output이라는 객체를 만들고, home, login이라는 �
   login: (req, res) => {
     res.render("home/login");
   },
+  register: (req, res) => {
+    res.render("home/register");
+  }
 };
 
 
