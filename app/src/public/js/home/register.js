@@ -1,21 +1,25 @@
 "use strict";
 
 const id = document.querySelector("#id"),
+  name = document.querySelector("#name"),
   psword = document.querySelector("#psword"),
-  loginBtn = document.querySelector("#button");
+  comfirmPsword = document.querySelector("#confirm-psword"),
+  registerBtn = document.querySelector("#button");
 
-loginBtn.addEventListener("click", login);
+registerBtn.addEventListener("click", register);
 
-function login() {
+function register() {
   const req = {
     id: id.value,
+    name: name.value,
     psword: psword.value,
+    comfirmPsword: comfirmPsword.value,
   };
   
   //fetch()는 브라우저에서 제공하는 API
   //fetch를 이용해서 서버에 요청을 보낸다.
 
-  fetch("/login", { //첫번째 인자는 요청을 보낼 주소, 두번째 인자는 옵션 객체, login이라는경로 post라는 메소드로 api가 있어야 됨
+  fetch("/register", { //첫번째 인자는 요청을 보낼 주소, 두번째 인자는 옵션 객체, register이라는경로 post라는 메소드로 api가 있어야 됨
     method: "POST", //요청 방식, GET, POST, PUT, DELETE, PATCH, OPTIONS, HEAD, CONNECT, TRACE,... , body를 보낼 때는 POST를 사용한다.
     headers: {
       "Content-Type": "application/json", //서버에게 보내는 데이터가 JSON임을 알려준다.
@@ -25,14 +29,14 @@ function login() {
     .then((res) => res.json())
     .then((res) => {
       if (res.success) {
-        location.href = "/login";
+        location.href = "/";
       } else {
         alert(res.msg);
       }
     }) 
     .catch((err) => {
       // console.error(new Error("로그인 중 에러 발생"));
-      console.error("회원가입 중 에러 발생");
+      console.error("로그인 중 에러 발생");
     });
   //then()은 fetch()가 성공적으로 끝나면 실행되는 콜백함수이다. res.json()은 응답을 json으로 바꿔준다.
   //res.json()은 promise를 리턴한다. 그래서 다시 then()을 사용한다.
