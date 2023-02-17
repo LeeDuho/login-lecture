@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  
+  <link rel="stylesheet" href="/css/home/login.css">
   <script src="/js/home/login.js " defer></script> <!--login.js를 불러옴, 이때 /js/home/login.js는 public/js/home/login.js를 의미-->
   <!-- login.js는 프론트엔드에서 사용할 js파일이다. -->
   <!-- defer는 js파일을 불러온 후에 실행하라는 의미이다.
@@ -14,8 +14,24 @@
   <title>Document</title>
 </head>
 <body>
-  <input id="id" type="text" placeholder='아이디'><br>
-  <input id="psword" type="text" placeholder='비밀번호'><br>
-  <button>로그인</button>
+  <div class="login-page">
+    <div class="form">
+      <!-- <form class="register-form">
+        <input type="text" placeholder="name"/>
+        <input type="password" placeholder="password"/>
+        <input type="text" placeholder="email address"/>
+        <button>create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form> -->
+      <form class="login-form">
+        <input id="id" type="text" placeholder="아이디"/>
+        <input id="psword" type="password" placeholder="비밀번호"/>
+        <button>login</button>
+        <p class="message">Not registered? <a href="register">Create an account</a></p>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
+
+<!-- Copyright (c) 2023 by Aigars Silkalns (https://codepen.io/colorlib/pen/rxddKy) -->
