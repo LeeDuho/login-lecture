@@ -1,11 +1,20 @@
+//app.js는 express를 사용하기 위한 기본적인 세팅을 해주는 파일이다.
+//서버의 실행과 관련된 코드는 bin/www.js에 작성한다.
+//mvc란 model, view, controller의 약자이다. 이대로 source를 나눴다
+//routes/home/home.ctrl.js는 controller이다. 사용자의 요청을 처리하는 역할을 한다.
+//controller는 model을 사용해서 데이터를 가져오고, view에게 전달한다.
+
 "use strict";
 
 //모듈
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 
-
+ 
 //라우팅
 const home = require("./src/routes/home"); //index.js를 가져온다.
 
